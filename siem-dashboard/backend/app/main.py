@@ -1,18 +1,21 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from routers import test
 
 app = FastAPI()
 
-# Allow frontend to access backend
+# CORS middleware setup (for frontend compatibility)
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # For dev, use ["http://localhost:3000"] in prod
+    allow_origins=["*"],  # Replace with frontend origin in prod
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
-@app.get("/")
-def read_root():
-    return {"message": "SIEM Dashboard API is running"}
+# Include routers
+app.include_router(test.router)
 
+@app.get("/")
+def root():
+    return {"message": "SIEM API is up and running"}
